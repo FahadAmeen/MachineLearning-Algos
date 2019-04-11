@@ -12,8 +12,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import xlsxwriter
 
-# import InExcel
-
 #
 # #Load dataset
 wine = datasets.load_wine()
@@ -160,7 +158,6 @@ column =4
 worksheet.write(row, column,metrics.accuracy_score(y_test, ppn_y_pred) )
 
 
-
 workbook.close()
 
 
@@ -225,4 +222,25 @@ np.set_printoptions(precision=2)
 
 # Plot non-normalized confusion matrix
 plot_confusion_matrix(y_test, knn_y_pred, classes=wine.target_names,
-                      title='Confusion matrix, without normalization')
+                      title='Confusion matrix KNN')
+plot_confusion_matrix(y_test, nb_y_pred, classes=wine.target_names,
+                      title='Confusion matrix NB')
+plot_confusion_matrix(y_test, decision_tree_y_pred, classes=wine.target_names,
+                      title='Confusion matrix DT')
+plot_confusion_matrix(y_test, ppn_y_pred, classes=wine.target_names,
+                      title='Confusion matrix PLA')
+
+knn_fig='knn.png'
+nb_fig='nb.png'
+dt_fig='dt.png'
+ppn_fig='ppn.png'
+
+plt.savefig(knn_fig)
+plt.savefig(nb_fig)
+plt.savefig(dt_fig)
+plt.savefig(ppn_fig)
+
+
+plt.show()
+
+# worksheet.insert_image(60,0,knn_fig, {'x_scale': 0.3, 'y_scale': 0.3})
