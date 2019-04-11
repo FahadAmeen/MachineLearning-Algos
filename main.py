@@ -55,6 +55,10 @@ print("Accuracy:", metrics.accuracy_score(y_test, ppn_y_pred))
 
 print(confusion_matrix(y_test,knn_y_pred,labels=[0,1,2]))
 
+# ############################################
+# Writing in xlsx file named Classifier.xlsx #
+# ############################################
+
 workbook = xlsxwriter.Workbook('Classifiers.xlsx')
 worksheet = workbook.add_worksheet('classifiers')
 cell_format = workbook.add_format({'bold': True, 'font_color': 'red'})
@@ -161,8 +165,9 @@ worksheet.write(row, column,metrics.accuracy_score(y_test, ppn_y_pred) )
 workbook.close()
 
 
-
-
+############################
+# ploting confusion matrix #
+############################
 
 def plot_confusion_matrix(y_true, y_pred, classes,
                           normalize=False,
@@ -239,8 +244,4 @@ plt.savefig(knn_fig)
 plt.savefig(nb_fig)
 plt.savefig(dt_fig)
 plt.savefig(ppn_fig)
-
-
 plt.show()
-
-# worksheet.insert_image(60,0,knn_fig, {'x_scale': 0.3, 'y_scale': 0.3})
