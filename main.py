@@ -7,26 +7,72 @@ from sklearn.linear_model import Perceptron
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import confusion_matrix
 from sklearn.utils.multiclass import unique_labels
-
+from sklearn.impute import SimpleImputer
 import numpy as np
 import pandas as pd
 
 import matplotlib.pyplot as plt
 import xlsxwriter
-
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 #
 # #Load dataset
-wine = datasets.load_wine()
+# wine = datasets.load_wine()
 
 # print the dataset in the excel file
 # wineDF = pd.DataFrame(data= np.c_[wine['data'], wine['target']],
 #                      columns= wine['feature_names'] + ['target']).to_csv('Dataset.csv')
 
+dataset = pd.read_csv("winequality_white.csv")
+print (type(dataset))
+X = dataset.iloc[:,:-1].values #Takes all rows of all columns except the last column
+Y = dataset.iloc[:,-1].values # Takes all rows of the last column
 
+# missing values
+imp = SimpleImputer(missing_values=np.nan, strategy="mean")
+X = imp.fit_transform(X)
+Y = Y.reshape(-1,1)
+Y = imp.fit_transform(Y)
+Y = Y.reshape(-1)
+
+# labelencoder_X = LabelEncoder()
+# X[:, -1] = labelencoder_X.fit_transform(X[:, -1])
+# hotencoder0 = OneHotEncoder(ColumnTransformer = [0])
+# hotencoder1 = OneHotEncoder(ColumnTransformer = [1])
+# hotencoder2 = OneHotEncoder(ColumnTransformer = [2])
+# hotencoder3 = OneHotEncoder(ColumnTransformer = [3])
+# hotencoder4 = OneHotEncoder(ColumnTransformer = [4])
+# hotencoder5 = OneHotEncoder(ColumnTransformer = [5])
+# hotencoder6 = OneHotEncoder(ColumnTransformer = [6])
+# hotencoder7 = OneHotEncoder(ColumnTransformer = [7])
+# hotencoder8 = OneHotEncoder(ColumnTransformer = [8])
+# hotencoder9 = OneHotEncoder(ColumnTransformer = [9])
+# hotencoder10 = OneHotEncoder(ColumnTransformer = [10])
+#
+# X = hotencoder0.fit_transform(X).toarray()
+# X = hotencoder1.fit_transform(X).toarray()
+# X = hotencoder2.fit_transform(X).toarray()
+# X = hotencoder3.fit_transform(X).toarray()
+# X = hotencoder4.fit_transform(X).toarray()
+# X = hotencoder5.fit_transform(X).toarray()
+# X = hotencoder6.fit_transform(X).toarray()
+# X = hotencoder7.fit_transform(X).toarray()
+# X = hotencoder8.fit_transform(X).toarray()
+# X = hotencoder9.fit_transform(X).toarray()
+# X = hotencoder10.fit_transform(X).toarray()
+#
+# labelencoder_Y = LabelEncoder()
+# Y = labelencoder_Y.fit_transform(Y)
+#
+# print (X)
+
+
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size = 0.3, random_state = 0)
 
 # # Split dataset into training set and test set
-X_train, X_test, y_train, y_test = train_test_split(wine.data, wine.target, test_size=0.3)  # 70% training and 30% test
-print (wine.target)
+# X_train, X_test, y_train, y_test = train_test_split(wine.data, wine.target, test_size=0.3)  # 70% training and 30% test
+# print (wine.target)
+
+
 print ('Test results\n',y_test)
 
 
@@ -148,12 +194,12 @@ for item,i in zip(ppn_y_pred,y_test):
 worksheet.write(row, column, wrong_pred,cell_format_sum)
 
 # Wrong predictions tag
-row = 55
+row +=1
 column =0
 worksheet.write(row, column, 'Wrong predictions', cell_format_accuracy)
 
 # Accuracy in xls
-row = 57
+row +=1
 column =0
 worksheet.write(row, column, 'Accuracy', cell_format_accuracy)
 
@@ -234,14 +280,14 @@ def plot_confusion_matrix(y_true, y_pred, classes,
 np.set_printoptions(precision=2)
 
 # Plot non-normalized confusion matrix
-plot_confusion_matrix(y_test, knn_y_pred, classes=wine.target_names,
-                      title='Confusion matrix KNN')
-plot_confusion_matrix(y_test, nb_y_pred, classes=wine.target_names,
-                      title='Confusion matrix NB')
-plot_confusion_matrix(y_test, decision_tree_y_pred, classes=wine.target_names,
-                      title='Confusion matrix DT')
-plot_confusion_matrix(y_test, ppn_y_pred, classes=wine.target_names,
-                      title='Confusion matrix PLA')
+# plot_confusion_matrix(y_test, knn_y_pred, classes=wine.target_names,
+#                       title='Confusion matrix KNN')
+# plot_confusion_matrix(y_test, nb_y_pred, classes=wine.target_names,
+#                       title='Confusion matrix NB')
+# plot_confusion_matrix(y_test, decision_tree_y_pred, classes=wine.target_names,
+#                       title='Confusion matrix DT')
+# plot_confusion_matrix(y_test, ppn_y_pred, classes=wine.target_names,
+#                       title='Confusion matrix PLA')
 
 knn_fig='knn.png'
 nb_fig='nb.png'
@@ -253,3 +299,4 @@ plt.savefig(nb_fig)
 plt.savefig(dt_fig)
 plt.savefig(ppn_fig)
 plt.show()
+
